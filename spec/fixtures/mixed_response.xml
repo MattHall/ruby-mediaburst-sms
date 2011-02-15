@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Message_Resp>
+  <SMS_Resp>
+    <To>441234567890</To>
+    <ClientID>ABC3374</ClientID>
+    <MessageID>IB_184864</MessageID>
+  </SMS_Resp>
+  <SMS_Resp>
+    <To>441234567891</To>
+    <ClientID>ABC3375</ClientID>
+    <ErrNo>10</ErrNo>
+    <ErrDesc>Invalid 'To' Parameter</ErrDesc>
+  </SMS_Resp>
+</Message_Resp>
