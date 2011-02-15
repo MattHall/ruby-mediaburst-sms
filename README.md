@@ -1,6 +1,6 @@
 # Mediaburst API Gem
 
-The Mediaburst Gem is the fastest way of integrating the Mediaburst API into your own ruby applications.
+The Mediaburst Gem is the fastest way of integrating the [Mediaburst API][2] into your own ruby applications.
 
 ## Installation
 
@@ -24,7 +24,7 @@ Send a message to several numbers:
 
     response = client.send_message(['441234567890', '441234567891', '441234567892'], 'My test message')
 
-Send a long message to several numbers using the concat option:
+Send a long message to several numbers using the [concat option][8]:
 
     options = {
       :concat => 3
@@ -60,3 +60,4 @@ Copyright © 2011 [Matthew Hall][4], released under the ISC license. All tradema
 [3]:https://github.com/mediaburst/ruby-mediaburst-sms
 [4]:http://codebeef.com/portfolio/mediaburst
 [5]:http://www.mediaburst.co.uk/api/reference/error-codes/
+[8]:http://www.mediaburst.co.uk/api/sending-a-message/parameters/#param-concat
