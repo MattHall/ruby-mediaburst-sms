@@ -9,10 +9,10 @@ Gem::Specification.new do |s|
   s.email       = ["matt@codebeef.com"]
   s.homepage    = "http://www.mediaburst.co.uk/api"
   s.summary     = "Ruby wrapper for the Mediaburst SMS API"
-  s.license     = 'MIT'
+  s.license     = 'ISC'
   s.description = 'Wrapper for the Mediaburst SMS sending API'
   
-  s.files       = Dir.glob("lib/**/*") + %w(MIT-LICENSE README.md)
+  s.files       = Dir.glob("lib/**/*") + %w(ISC-LICENSE README.md)
   
   s.add_runtime_dependency('nokogiri')
   
