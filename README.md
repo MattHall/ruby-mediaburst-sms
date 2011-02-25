@@ -32,6 +32,15 @@ Send a long message to several numbers using the [concat option][8]:
     
     response = client.send_message(['441234567890', '441234567891', '441234567892', '44'], SOME_LONG_MESSAGE, options)
 
+Send a long message with a custom from address [from option][9]:
+
+    options = {
+      :concat => 3,
+      :from => 'RubyDemo'
+    }
+
+    response = client.send_message(['441234567890', '441234567891', '441234567892', '44'], SOME_LONG_MESSAGE, options)
+
 Check the response for errors:
 
     y response
@@ -61,3 +70,4 @@ Copyright © 2011 [Matthew Hall][4], released under the ISC license. All tradema
 [4]:http://codebeef.com/portfolio/mediaburst
 [5]:http://www.mediaburst.co.uk/api/reference/error-codes/
 [8]:http://www.mediaburst.co.uk/api/sending-a-message/parameters/#param-concat
+[9]:http://www.mediaburst.co.uk/api/sending-a-message/parameters/#param-from
