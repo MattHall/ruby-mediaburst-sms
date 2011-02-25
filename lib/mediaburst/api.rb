@@ -41,14 +41,13 @@ module Mediaburst
           xml.Username @auth[:username]
           xml.Password @auth[:password]
           
-          options.each do |k, v|
-            xml.send(k.to_s, v)
-          end
-          
           numbers.each do |number|
             xml.SMS {
               xml.To number
               xml.Content content
+              options.each do |k, v|
+                xml.send(k.to_s, v)
+              end
             }
           end
         }
