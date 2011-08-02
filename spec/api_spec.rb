@@ -12,7 +12,7 @@ module Mediaburst
   describe "if the server has gone away" do
     it "should throw a ServerError exception" do
       client = Mediaburst::API.new('username', 'password')
-      stub_request(:post, Mediaburst::ENDPOINT).to_return(:status => [500, "Internal Server Error"])
+      stub_request(:post, Mediaburst::SEND_ENDPOINT).to_return(:status => [500, "Internal Server Error"])
       
       lambda do
         client.send_message('1234567890', 'test')
@@ -24,7 +24,7 @@ module Mediaburst
   describe "with invalid requests" do
     it "should throw an InvalidRequest exception" do
       client = Mediaburst::API.new('username', 'password')
-      stub_request(:post, Mediaburst::ENDPOINT).to_return(:status => 200, :body => File.open(File.dirname(__FILE__) + '/fixtures/invalid_response.xml', "r").read)
+      stub_request(:post, Mediaburst::SEND_ENDPOINT).to_return(:status => 200, :body => File.open(File.dirname(__FILE__) + '/fixtures/invalid_response.xml', "r").read)
       
       lambda do
         client.send_message('1234567890', 'test')
@@ -70,7 +70,7 @@ module Mediaburst
   
   describe "parsing the response" do
     before(:each) do
-      stub_request(:post, Mediaburst::ENDPOINT).to_return(:status => 200, :body => File.open(File.dirname(__FILE__) + '/fixtures/mixed_response.xml', "r").read)
+      stub_request(:post, Mediaburst::SEND_ENDPOINT).to_return(:status => 200, :body => File.open(File.dirname(__FILE__) + '/fixtures/mixed_response.xml', "r").read)
       @client = Mediaburst::API.new('username', 'password')
       @response = @client.send_message('1234567890', 'test')
     end
@@ -81,6 +81,45 @@ module Mediaburst
     
     it "should describe the error message on failure" do
       @response['441234567891'].should eql(10)
+    end
+  end
+  
+  
+  describe "getting the account credit" do
+    before(:each) do
+      @request_path = "http://sms.message-platform.com/http/credit.aspx?password=password&username=username"
+    end
+    
+    describe "with valid credentials" do
+      before(:each) do
+        stub_request(:get, @request_path).to_return(:status => 200, :body => File.open(File.dirname(__FILE__) + '/fixtures/credit_response.html', "r").read)
+        @client = Mediaburst::API.new('username', 'password')
+        @response = @client.get_credit
+      end
+      
+      it "should return the correct credit value" do
+        @response.should eql("90250")
+      end
+    end
+    
+    describe "with invalid credentials" do
+      it "should return nil" do
+        stub_request(:get, @request_path).to_return(:status => 200, :body => File.open(File.dirname(__FILE__) + '/fixtures/invalid_credit_response.html', "r").read)
+        client = Mediaburst::API.new('username', 'password')
+
+        client.get_credit.should be_nil
+      end
+    end
+    
+    describe "with the server not returning correct results" do
+      it "should raise an exception" do
+        client = Mediaburst::API.new('username', 'password')
+        stub_request(:get, @request_path).to_return(:status => [500, "Internal Server Error"])
+
+        lambda do
+          client.get_credit
+        end.should raise_error(Mediaburst::ServerError)
+      end
     end
   end
   

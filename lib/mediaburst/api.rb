@@ -2,7 +2,8 @@ require 'nokogiri'
 require 'net/http'
 
 module Mediaburst
-  ENDPOINT = 'http://sms.message-platform.com/xml/send.aspx'
+  SEND_ENDPOINT = 'http://sms.message-platform.com/xml/send.aspx'
+  CREDIT_ENDPOINT = 'http://sms.message-platform.com/http/credit.aspx'
   
   # Thrown when an invalid request is made, 
   # e.g invalid credentials were used
@@ -17,6 +18,28 @@ module Mediaburst
   class API
     def initialize(u, p)
       @auth = {:username => u, :password => p}
+    end
+    
+    
+    # Returns the about of credit left on a user account
+    #
+    # nil if there was a problem retrieving the value, and
+    # Throws an exception if the server didn't process 
+    # the request succesfully.
+    def get_credit
+      uri = URI.parse(CREDIT_ENDPOINT + "?username=#{@auth[:username]}&password=#{@auth[:password]}")
+      http = Net::HTTP.new(uri.host, uri.port)
+      request = Net::HTTP::Get.new(uri.request_uri)
+      request["Content-Type"] = "text/html"
+
+      response = http.request(request)
+      
+      case response
+      when Net::HTTPSuccess
+        return response.body.gsub!(/^Current Credit: ([0-9]+)/, '\1')
+      else
+        raise Mediaburst::ServerError, "Request failed: #{response}"
+      end
     end
   
     # Takes a number or array of numbers and a content string
@@ -59,7 +82,7 @@ module Mediaburst
     # Send a request to the endpoint
     def send_request(request_body)
       # Create and send the request
-      uri = URI.parse(ENDPOINT)
+      uri = URI.parse(SEND_ENDPOINT)
       http = Net::HTTP.new(uri.host, uri.port)
       request = Net::HTTP::Post.new(uri.request_uri)
       request.body = request_body

@@ -52,6 +52,18 @@ Check the response for errors:
 
 On error, the value of the key referenced by the number will equal the [error code][5] returned from Mediaburst.
 
+### Checking the Account's Credit
+
+Create an instance of the Mediaburst client:
+
+    client = Mediaburst::API.new('username', 'password')
+
+Request the credit amount
+
+    client.get_credit
+    => "150"
+
+Given invalid credentials, this method will return nil. If the server responds with anything other than a 200, a Mediaburst::ServerError exception is raised.
 
 ## Development
 
